@@ -1,5 +1,19 @@
 # @embedpdf/engine-runtime
 
+## 3.4.0
+
+### Patch Changes
+
+- [#1143](https://github.com/embedpdf/embed-pdf-viewer/pull/1143) by [@KleiKodesh](https://github.com/KleiKodesh) – Smaller and faster to start: the generated table of runtime function signatures is written compactly (each distinct parameter or result type once, each function as one line of indices) instead of as a nested object literal per parameter. The engine worker script shrinks by about 350 KB, and parsing and building the table no longer slows its start. No API change.
+
+- [#1125](https://github.com/embedpdf/embed-pdf-viewer/pull/1125) by [@bobsingor](https://github.com/bobsingor) – Ship only the declaration files the package exports. The package no longer includes a `.d.ts` for each internal source file (`dist/core/platform.d.ts` and nine more), which no export pointed to. `index.d.ts`, `index.d.cts`, `build-id.d.ts`, `build-id.d.cts` and every JavaScript file are unchanged.
+
+- [#1118](https://github.com/embedpdf/embed-pdf-viewer/pull/1118) by [@bobsingor](https://github.com/bobsingor) – A mark fitted into a form widget follows the widget's turn. `EPDFAnnot_UpdateAppearanceToRect()` on a widget reads the turn from `/MK /R` and fits the drawing into the frame that turn gives, so a mark in a turned signature field reads the way the field does. It was fitted into `/Rect` with no turn. A widget that isn't turned is drawn as before, and a widget's `/Rect` is never written.
+
+  A field whose `/MK /R` is negative is drawn as that turn, -90 as 270, the way Acrobat shows it. It drew nothing.
+
+  A stamp turned exactly 90, 180 or 270 degrees gets whole numbers in its appearance's `/Matrix` and `/Rect`.
+
 ## 3.3.0
 
 ## 3.2.0

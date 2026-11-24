@@ -1,5 +1,11 @@
 # @embedpdf/engine
 
+## 3.4.0
+
+### Minor Changes
+
+- [#1145](https://github.com/embedpdf/embed-pdf-viewer/pull/1145) by [@bobsingor](https://github.com/bobsingor) – `doc.forms.setSignatureAppearance()` and `doc.signatures.prepare()` take a PNG or a JPEG as the mark, as a `Uint8Array` or a `Blob`, beside a one-page PDF: pass the bytes themselves. `doc.forms.setSignatureAppearance(field, null)` takes a drawn mark out, so the field shows its own box again and its style can change. `{ pdf }` works as before, for a one-page PDF only.
+
 ## 3.3.0
 
 ### Minor Changes

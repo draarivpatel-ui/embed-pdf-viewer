@@ -1,5 +1,15 @@
 # @cloudpdf/sdk
 
+## 3.4.0
+
+### Minor Changes
+
+- [#1140](https://github.com/embedpdf/embed-pdf-viewer/pull/1140) by [@bobsingor](https://github.com/bobsingor) – `groupId` on `FormFieldDraft` and `FormFieldPatch` is `string | null`. In a `forms.create` op, `null` means the same as leaving it out: the field is in no group. In a `forms.update` op, `null` takes the field out of its group.
+
+  A field created without a `groupId` is now in no group. It used to go in the token's own group (`identity.groupId`), so only a token whose identity has a group sees a difference. To keep the old result, name the group in the draft.
+
+- [#1145](https://github.com/embedpdf/embed-pdf-viewer/pull/1145) by [@bobsingor](https://github.com/bobsingor) – `ChangeOp.FormsSetSignatureAppearance` takes `resources: { appearance: null }`, which takes a drawn mark out of the signature field. It needs a server of version 3.4.
+
 ## 3.3.0
 
 ### Minor Changes

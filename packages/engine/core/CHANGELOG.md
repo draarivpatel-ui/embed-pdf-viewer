@@ -1,5 +1,22 @@
 # @embedpdf/engine-core
 
+## 3.4.0
+
+### Minor Changes
+
+- [#1140](https://github.com/embedpdf/embed-pdf-viewer/pull/1140) by [@bobsingor](https://github.com/bobsingor) – A new form field is in no group unless its draft names one, and `groupId: null` takes a field out of its group. Both engines follow the same rule.
+
+  **This changes what a create does.** Until now a field created without a `groupId` went in the session's own group (`identity.groupId`). It is now in no group. Only a session whose identity has a group, and that creates a field without naming one, sees a difference. To keep the old result, name the group in the draft: `doc.forms.create({ kind: 'text', name: 'note', groupId: 'legal', widgets })`. Naming your own group still takes no `fields:set-group` permission. Documents that already exist don't change, and annotations keep their rules: a new annotation still goes in its creator's group, and its group can't be removed.
+  - `FormFieldDraft.groupId` and `FormFieldPatch.groupId` are `string | null`. In a draft, `null` means the same as leaving it out. In a patch, `null` takes the field out of its group. That takes form design (`doc.forms.modify`) and no `fields:set-group` permission. A field's group used to be documented as "changed, never removed".
+  - `FormFieldDraftSchema` and `FormFieldPatchSchema` take `groupId: null`, so a request to the cloud engine does too.
+  - `authorizeFieldGroup()` takes `null`, which needs no right.
+  - `formFieldOfDraft()` gives a field in no group for a draft that names none. `FieldDraftContext.groupId` is deprecated and no longer read. It goes in 4.0.
+  - `runFieldGroupsConformance` checks the default, `null` in a draft and in a patch, the right each one takes, and undo.
+
+- [#1145](https://github.com/embedpdf/embed-pdf-viewer/pull/1145) by [@bobsingor](https://github.com/bobsingor) – A signature field's mark is a PNG, a JPEG or a one-page PDF, and it can be taken out again. `doc.forms.setSignatureAppearance(field, appearance)` and the `appearance` of `doc.signatures.prepare()` take the picture's bytes themselves, a `Uint8Array` or a `Blob`, in the formats a stamp's `appearance` resource takes; `SignatureAppearance` is their type. `setSignatureAppearance(field, null)` takes the mark out, and the change op `forms.setSignatureAppearance` takes `appearance: null` the same way. Bytes that are no PNG, JPEG or PDF are refused with `InvalidArg` before anything is sent. `{ pdf }` works as before and takes a one-page PDF only: an image under it is still refused.
+
+  On the wire, an image travels in the `appearance` part a PDF travels in, and the op's `resources.appearance` may be `null` for no mark (`FieldAppearanceResourceKeysSchema`). Both arrived in 3.4 (`MARK_IMAGE_OR_NONE_SINCE`). A `forms.setSignatureAppearance` worker request carries a mark passed as its bytes as `appearance`, and one passed as `{ pdf }` as `pdf`.
+
 ## 3.3.0
 
 ### Minor Changes
